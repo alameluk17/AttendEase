@@ -54,8 +54,8 @@ async function getMoodleToken(moodleBaseURL: string, username: string, password:
         throw error;  // This can be handled by the caller
     }
 }
-let a = await getMoodleToken("https://lms.aathish.us.kg","user","bitnami")
-console.log(a)
+// let a = await getMoodleToken("https://lms.aathish.us.kg","user","bitnami")
+// console.log(a)
 
 // const joodle = new Joodle();
 
