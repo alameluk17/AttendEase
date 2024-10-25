@@ -3,7 +3,7 @@ from appwrite.services.users import Users
 from appwrite.exception import AppwriteException
 
 import os
-from .common.moodleapi import MoodleWebServiceAPIClient
+from common.moodleapi import MoodleWebServiceAPIClient
 from dotenv import load_dotenv
 load_dotenv()
 import requests
