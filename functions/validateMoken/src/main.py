@@ -2,8 +2,9 @@ from appwrite.client import Client
 from appwrite.services.users import Users
 from appwrite.exception import AppwriteException
 import os
-from pymoodle import MoodleWebServiceAPIClient
+from pymoodle import MoodleWebServiceAPIClient, MoodleError,MoodleException
 import requests
+
 
 # This Appwrite function will be executed every time your function is triggered
 def main(context):
@@ -20,7 +21,9 @@ def main(context):
         if "moken" not in jsonobj:
             raise Exception("`moken` must be provided in the JSON Request Body.")
         moodle = MoodleWebServiceAPIClient(token=jsonobj["moken"],api_base="https://lms.ssn.edu.in")
-        moodle.get_user_courses(userid=moodle.CLIENT_USER_DATA["userid"])
+        moodleUserId = moodle.CLIENT_USER_DATA["userid"]
+        user_data = moodle.get_users_by_field(moodleUserId)
+        moodle.get_user_courses(userid=moodle.CLIENT_USER_DATA["userid"])       
         return context.res.json(moodle.CLIENT_USER_DATA)
     except Exception as e:
         print(e)
