@@ -2,6 +2,8 @@ from appwrite.client import Client
 from appwrite.services.users import Users
 from appwrite.exception import AppwriteException
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # This Appwrite function will be executed every time your function is triggered
 def main(context):
