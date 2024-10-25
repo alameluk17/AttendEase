@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import { useState } from 'react';
+import React from 'react';
 
 async function getMoodleToken(moodleBaseURL: string, username: string, password: string): Promise<string> {
   try {
@@ -59,12 +60,10 @@ export default function Login() {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-    // Add login logic here
     try {
-      
       let token = await getMoodleToken("https://lms.ssn.edu.in", email, password);
       console.log("Token:", token);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Login failed:", error.message);
     }
   };
