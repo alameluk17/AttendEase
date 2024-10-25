@@ -26,7 +26,7 @@ def main(context):
         moodleUserId = moodle.CLIENT_USER_DATA["userid"]
         user_data = moodle.get_users_by_field("id",[moodleUserId])
         emailAddress= user_data[0]["email"]
-        rollNo = user_data["idnumber"]
+        rollNo = user_data[0]["idnumber"]
         
         result = users.list(Query.equal("email",emailAddress))
         print(result)
