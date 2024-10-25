@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity } from 'rea
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store'
+import { Client, Functions, ExecutionMethod } from "appwrite"
 
 async function getMoodleToken(moodleBaseURL: string, username: string, password: string): Promise<string> {
   try {
@@ -66,14 +67,39 @@ const Login = ({navigation}: {navigation: any})=>{
   const handleLogin = async () => {
     try {
       let token = await getMoodleToken("https://lms.ssn.edu.in", email, password);
+      await textAppWriteAPI()
       setErrorMessage(null)
       await SecureStore.setItemAsync('currentMoken', token);
-      console.log("Token:", token);
+      // console.log("Token:", token);
     } catch (error: any) {
       setErrorMessage(error.message)
       console.error("Login failed:", error.message);
     }
   };
+
+  const textAppWriteAPI = async () =>{ 
+    const client = new Client()
+    .setEndpoint('https://cloud.appwrite.io/v1') // Your API Endpoint
+    .setProject('attendease'); // Your project ID
+
+    const functions = new Functions(client);
+
+    const body = {moken : 'abcd'}
+
+    try {
+      const result = await functions.createExecution(
+        'getAppwriteToken', // functionId
+        JSON.stringify(body), // body (optional)
+        true, // async (optional)
+        '/', // path (optional)
+        ExecutionMethod.POST, // method (optional)
+        {}, //headers (optional)
+      );
+      console.log("Result: ", result);
+    }catch(error){
+      console.log(error)
+    }
+  }
 
   return (
     <View style={styles.container}>
