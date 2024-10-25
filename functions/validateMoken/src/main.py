@@ -28,7 +28,7 @@ def main(context):
         emailAddress= user_data[0]["email"]
         rollNo = user_data[0]["idnumber"]
         
-        result = users.list(Query.equal("email",emailAddress))
+        result = users.list([Query.equal("email",emailAddress)])
         print(result)
         # if not(result):
         #     #new user
