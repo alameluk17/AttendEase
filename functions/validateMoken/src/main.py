@@ -1,11 +1,8 @@
 from appwrite.client import Client
 from appwrite.services.users import Users
 from appwrite.exception import AppwriteException
-
 import os
-from common.moodleapi import MoodleWebServiceAPIClient
-from dotenv import load_dotenv
-load_dotenv()
+from pymoodle import MoodleWebServiceAPIClient
 import requests
 
 # This Appwrite function will be executed every time your function is triggered
@@ -19,7 +16,6 @@ def main(context):
             .set_project(os.environ["APPWRITE_FUNCTION_PROJECT_ID"])
             .set_key(context.req.headers["x-appwrite-key"])
         )
-        print(context.req.body)
         jsonobj = context.req.body_json
         if "moken" not in jsonobj:
             raise Exception("`moken` must be provided in the JSON Request Body.")
