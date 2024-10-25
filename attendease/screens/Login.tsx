@@ -67,7 +67,10 @@ const Login = ({navigation}: {navigation: any})=>{
   const handleLogin = async () => {
     try {
       let token = await getMoodleToken("https://lms.ssn.edu.in", email, password);
+      console.log("1")
+
       await textAppWriteAPI()
+      console.log("2")
       setErrorMessage(null)
       await SecureStore.setItemAsync('currentMoken', token);
       // console.log("Token:", token);
@@ -86,16 +89,32 @@ const Login = ({navigation}: {navigation: any})=>{
 
     const body = {moken : 'abcd'}
 
-    try {
-      const result = await functions.createExecution(
-        'getAppwriteToken', // functionId
-        JSON.stringify(body), // body (optional)
-        true, // async (optional)
-        '/', // path (optional)
-        ExecutionMethod.POST, // method (optional)
-        {}, //headers (optional)
-      );
-      console.log("Result: ", result);
+    // try {
+    //   const result= await functions.createExecution(
+    //     'getAppwriteToken', // functionId
+    //     JSON.stringify(body), // body (optional)
+    //     true, // async (optional)
+    //     '/', // path (optional)
+    //     ExecutionMethod.POST, // method (optional)
+    //     {}, //headers (optional)
+    //   );
+    //   console.log("Result: ", result['$id']);
+    //   const res = await functions.getExecution(
+    //     'getAppWriteToken', // functionId
+    //     result['$id'] // executionId
+    //   );
+    //   console.log(res)
+    
+    // }catch(error){
+    //   console.log(error)
+    // }
+
+    try{
+      const result = await fetch('https://671b42ca91a9506b72d5.appwrite.global/', {
+      method: 'POST',
+      body: JSON.stringify(body)
+      })
+      console.log(await result.json())
     }catch(error){
       console.log(error)
     }

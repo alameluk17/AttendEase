@@ -2,6 +2,9 @@ from appwrite.client import Client
 from appwrite.services.users import Users
 from appwrite.exception import AppwriteException
 import os
+from dotenv import load_dotenv
+load_dotenv()
+import requests
 
 # This Appwrite function will be executed every time your function is triggered
 def main(context):
@@ -15,25 +18,27 @@ def main(context):
     )
     users = Users(client)
 
+    moken = context.req.body["moken"]
+
     try:
-        response = users.list()
-        # Log messages and errors to the Appwrite Console
-        # These logs won't be seen by your end users
-        context.log("Total users: " + str(response["total"]))
-    except AppwriteException as err:
-        context.error("Could not list users: " + repr(err))
+        request_url = "https://lms.ssn.edu.in/webservice/rest/server.php"
+        response = requests.post(request_url,
+                      data={"wsfunction":"core_webservice_get_site_info",
+                            "wstoken":moken,
+                            "moodlewsrestformat":"json"})
+        if "exception" in response.json():
+            raise Exception
+        else:
+            return context.res.json(
+                response.json()
+            )
 
-    # The req object contains the request data
-    if context.req.path == "/ping":
-        # Use res object to respond with text(), json(), or binary()
-        # Don't forget to return a response!
-        return context.res.text("Pong")
+    except Exception as e:
+        print(e)
+        return context.res.json(
+            {"Error":str(e)},500
+        )
 
-    return context.res.json(
-        {
-            "motto": "Build like a team of hundreds_",
-            "learn": "https://appwrite.io/docs",
-            "connect": "https://appwrite.io/discord",
-            "getInspired": "https://builtwith.appwrite.io",
-        }
-    )
+    
+
+    
