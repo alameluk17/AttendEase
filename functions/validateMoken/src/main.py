@@ -20,7 +20,14 @@ def main(context):
 
     print(context.req.body)
 
-    moken = context.req.body.json()["moken"]
+    jsonobj = json.loads(context.req.body)
+    print(jsonobj)
+
+    mok = jsonobj["moken"]
+    print("mok: ", mok)
+
+    moken = context.req.bodyJson["moken"]
+    print("moken bodyJson oh gawd: ", moken)
 
     try:
         request_url = "https://lms.ssn.edu.in/webservice/rest/server.php"
