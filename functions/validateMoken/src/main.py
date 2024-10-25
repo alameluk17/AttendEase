@@ -3,7 +3,7 @@ from appwrite.services.users import Users
 from appwrite.exception import AppwriteException
 
 import os
-from .moodleapi import MoodleWebServiceAPIClient
+from .common.moodleapi import MoodleWebServiceAPIClient
 from dotenv import load_dotenv
 load_dotenv()
 import requests
@@ -24,7 +24,7 @@ def main(context):
         if "moken" not in jsonobj:
             raise Exception("`moken` must be provided in the JSON Request Body.")
         moodle = MoodleWebServiceAPIClient(token=jsonobj["moken"],api_base="https://lms.ssn.edu.in")
-
+        moodle.get_user_courses(userid=moodle.CLIENT_USER_DATA["userid"])
         return context.res.json(moodle.CLIENT_USER_DATA)
     except Exception as e:
         print(e)
