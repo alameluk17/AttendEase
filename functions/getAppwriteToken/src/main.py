@@ -9,6 +9,9 @@ load_dotenv()
 def main(context):
     # You can use the Appwrite SDK to interact with other services
     # For this example, we're using the Users service
+    print(context)
+    print(context.req)
+    print(context.req.headers)
     client = (
         Client()
         .set_endpoint(os.environ["APPWRITE_FUNCTION_API_ENDPOINT"])
