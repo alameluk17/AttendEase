@@ -18,7 +18,7 @@ def main(context):
     users = Users(client)
     token = users.create_token('671b4700002a7f94b1da')
     print(token)
-    # secret = token.secret
+    secret = token['secret']
 
     # try:
     #     response = users.list()
