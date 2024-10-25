@@ -2,6 +2,8 @@ from appwrite.client import Client
 from appwrite.services.users import Users
 from appwrite.exception import AppwriteException
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # This Appwrite function will be executed every time your function is triggered
 def main(context):
@@ -14,26 +16,25 @@ def main(context):
         .set_key(context.req.headers["x-appwrite-key"])
     )
     users = Users(client)
+    token = users.create_token('[USER_ID]')
+    secret = token.secret
 
-    try:
-        response = users.list()
-        # Log messages and errors to the Appwrite Console
-        # These logs won't be seen by your end users
-        context.log("Total users: " + str(response["total"]))
-    except AppwriteException as err:
-        context.error("Could not list users: " + repr(err))
+    # try:
+    #     response = users.list()
+    #     # Log messages and errors to the Appwrite Console
+    #     # These logs won't be seen by your end users
+    #     context.log("Total users: " + str(response["total"]))
+    # except AppwriteException as err:
+    #     context.error("Could not list users: " + repr(err))
 
-    # The req object contains the request data
-    if context.req.path == "/ping":
-        # Use res object to respond with text(), json(), or binary()
-        # Don't forget to return a response!
-        return context.res.text("Pong")
+    # # The req object contains the request data
+    # if context.req.path == "/ping":
+    #     # Use res object to respond with text(), json(), or binary()
+    #     # Don't forget to return a response!
+    #     return context.res.text("Pong")
 
     return context.res.json(
         {
-            "motto": "Build like a team of hundreds_",
-            "learn": "https://appwrite.io/docs",
-            "connect": "https://appwrite.io/discord",
-            "getInspired": "https://builtwith.appwrite.io",
+            "token" : secret
         }
     )
