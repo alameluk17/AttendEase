@@ -1,8 +1,8 @@
-import json
 from appwrite.client import Client
 from appwrite.services.users import Users
 from appwrite.exception import AppwriteException
 import os
+from moodle import Moodle
 from dotenv import load_dotenv
 load_dotenv()
 import requests
@@ -18,27 +18,14 @@ def main(context):
         .set_key(context.req.headers["x-appwrite-key"])
     )
     users = Users(client)
-
     print(context.req.body)
     try:
-        jsonobj = json.loads(context.req.body)
-        moken = jsonobj["moken"]
-        print("mok: ", moken)
-
-        # moken = context.req.bodyJson["moken"]
-        # print("moken bodyJson oh gawd: ", moken)
-        request_url = "https://lms.ssn.edu.in/webservice/rest/server.php"
-        response = requests.post(request_url,
-                      data={"wsfunction":"core_webservice_get_site_info",
-                            "wstoken":moken,
-                            "moodlewsrestformat":"json"})
-        if "exception" in response.json():
-            raise Exception
-        else:
-            return context.res.json(
-                response.json()
-            )
-
+        jsonobj = context.req.body_json
+        if "moken" not in jsonobj:
+            raise Exception("`moken` must be provided in the JSON Request Body.")
+        moodle = Moodle("https://lms.ssn.edu.in/webservice/rest/server.php", jsonobj["moken"])
+        site_info = moodle.core.webservice.get_site_info()
+        return {"info":site_info}
     except Exception as e:
         print(e)
         return context.res.json(
