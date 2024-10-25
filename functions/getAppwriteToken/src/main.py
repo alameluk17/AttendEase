@@ -19,6 +19,7 @@ def main(context):
             .set_project(os.environ["APPWRITE_FUNCTION_PROJECT_ID"])
             .set_key(context.req.headers["x-appwrite-key"])
         )
+        print(dir(context.req))
         if ("moken" not in context.req.bodyJson):
             raise Exception("moken must be provided.")
         
