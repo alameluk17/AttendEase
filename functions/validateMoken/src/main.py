@@ -1,6 +1,7 @@
 from appwrite.client import Client
 from appwrite.services.users import Users
 from appwrite.query import Query
+from appwrite.id import ID
 from appwrite.exception import AppwriteException
 import os
 from pymoodle import MoodleWebServiceAPIClient, MoodleError,MoodleException
@@ -27,14 +28,20 @@ def main(context):
         user_data = moodle.get_users_by_field("id",[moodleUserId])
         emailAddress= user_data[0]["email"]
         rollNo = user_data[0]["idnumber"]
+        name = user_data[0]["fullname"]
         
         result = users.list([Query.equal("email",emailAddress)])
         print(result)
-        # if not(result):
-        #     #new user
-
-        moodle.get_user_courses(userid=moodle.CLIENT_USER_DATA["userid"])       
-        return context.res.json(user_data)
+        if result["total"] < 1:
+            # Create New User
+            result = users.create(
+            user_id = ID.unique(),
+            email = emailAddress, # optional
+            name = name # optional
+            )
+            print(result)
+          
+        return context.res.json(moodle.get_user_courses(userid=moodle.CLIENT_USER_DATA["userid"]))
     except Exception as e:
         print(e)
         return context.res.json(
