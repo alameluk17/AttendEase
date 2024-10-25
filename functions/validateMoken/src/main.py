@@ -25,7 +25,7 @@ def main(context):
         user_data = moodle.get_users_by_field("id",[moodleUserId])
         print(user_data)
         moodle.get_user_courses(userid=moodle.CLIENT_USER_DATA["userid"])       
-        return context.res.json(moodle.CLIENT_USER_DATA)
+        return context.res.json(user_data)
     except Exception as e:
         print(e)
         return context.res.json(
