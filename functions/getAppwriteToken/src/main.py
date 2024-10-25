@@ -36,6 +36,6 @@ def main(context):
 
     return context.res.json(
         {
-            "token" : "hellp"
+            "token" : secret
         }
     )
