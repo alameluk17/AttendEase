@@ -19,19 +19,18 @@ def main(context):
             .set_project(os.environ["APPWRITE_FUNCTION_PROJECT_ID"])
             .set_key(context.req.headers["x-appwrite-key"])
         )
-        print(dir(context.req))
-        if ("moken" not in context.req.bodyJson):
+        if ("moken" not in context.req.body_json):
             raise Exception("moken must be provided.")
         
         request_url = "https://lms.ssn.edu.in/webservice/rest/server.php"
         response = requests.post(request_url,
                       data={"wsfunction":"core_webservice_get_site_info",
-                            "wstoken":context.req.bodyJson["moken"],
+                            "wstoken":context.req.body_json["moken"],
                             "moodlewsrestformat":"json"})
         site_info = response.json()
         response = requests.post(request_url,
                     data={"wsfunction":"core_enrol_get_users_courses",
-                            "wstoken":context.req.bodyJson["moken"],
+                            "wstoken":context.req.body_json["moken"],
                             "moodlewsrestformat":"json",
                             "userid":site_info['userid']})
         return context.res.json(response.json(),200)
