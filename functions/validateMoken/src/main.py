@@ -20,17 +20,13 @@ def main(context):
     users = Users(client)
 
     print(context.req.body)
-
-    jsonobj = json.loads(context.req.body)
-    print(jsonobj)
-
-    mok = jsonobj["moken"]
-    print("mok: ", mok)
-
-    moken = context.req.bodyJson["moken"]
-    print("moken bodyJson oh gawd: ", moken)
-
     try:
+        jsonobj = json.loads(context.req.body)
+        moken = jsonobj["moken"]
+        print("mok: ", moken)
+
+        # moken = context.req.bodyJson["moken"]
+        # print("moken bodyJson oh gawd: ", moken)
         request_url = "https://lms.ssn.edu.in/webservice/rest/server.php"
         response = requests.post(request_url,
                       data={"wsfunction":"core_webservice_get_site_info",
