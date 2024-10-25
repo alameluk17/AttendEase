@@ -19,6 +19,7 @@ def main(context):
             .set_key(context.req.headers["x-appwrite-key"])
         )
         users = Users(client)
+        print("Hello")
         token = users.create_token('671b4700002a7f94b1da')
         secret = token['secret']
         responsebody["token"] = secret
