@@ -1,3 +1,4 @@
+import json
 from appwrite.client import Client
 from appwrite.services.users import Users
 from appwrite.exception import AppwriteException
