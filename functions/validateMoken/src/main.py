@@ -25,7 +25,7 @@ def main(context):
             raise Exception("`moken` must be provided in the JSON Request Body.")
         moodle = Moodle("https://lms.ssn.edu.in/webservice/rest/server.php", jsonobj["moken"])
         site_info = moodle.core.webservice.get_site_info()
-        return {"info":site_info}
+        return context.res.json({"info":site_info})
     except Exception as e:
         print(e)
         return context.res.json(
