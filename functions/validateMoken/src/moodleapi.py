@@ -17,7 +17,14 @@ class MoodleException(Exception):
         self.errorcode = errorcode
         self.message = message
         self.debuginfo = debuginfo
-        super().__init__(f"{self.message} - {self.debuginfo}")
+        if self.message and self.debuginfo:
+            super().__init__(f"Message: {self.message} DebugInfo:{self.debuginfo}")
+        elif self.message:
+            super().__init__(f"Message: {self.message}")
+        elif self.debuginfo:
+            super().__init__(f"DebugInfo: {self.debuginfo}")
+        else:
+            super().__init__(f"Generic MoodleException")
 
 class MoodleWebServiceAPIClient():
     _HEADERS = {
