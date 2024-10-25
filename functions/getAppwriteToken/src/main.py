@@ -24,5 +24,5 @@ def main(context):
         responsebody["token"] = secret
         return context.res.json(responsebody)
     except Exception as e:
-        responsebody["error"] = e
+        responsebody["error"] = str(e)
         return context.res.json(responsebody,500)
