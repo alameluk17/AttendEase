@@ -18,7 +18,9 @@ def main(context):
     )
     users = Users(client)
 
-    moken = context.req.body["moken"]
+    print(context.req.body)
+
+    moken = context.req.body.json()["moken"]
 
     try:
         request_url = "https://lms.ssn.edu.in/webservice/rest/server.php"

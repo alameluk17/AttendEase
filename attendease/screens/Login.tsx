@@ -109,8 +109,18 @@ const Login = ({navigation}: {navigation: any})=>{
     //   console.log(error)
     // }
 
-    try{
-      const result = await fetch('https://671b42ca91a9506b72d5.appwrite.global/', {
+    // try{
+    //   const result = await fetch('https://671b42ca91a9506b72d5.appwrite.global/', {
+    //   method: 'POST',
+    //   body: JSON.stringify(body)
+    //   })
+    //   console.log(await result.json())
+    // }catch(error){
+    //   console.log(error)
+    // }
+
+     try{
+      const result = await fetch('https://671b5d59cae31d6fd0ef.appwrite.global', {
       method: 'POST',
       body: JSON.stringify(body)
       })
@@ -118,6 +128,7 @@ const Login = ({navigation}: {navigation: any})=>{
     }catch(error){
       console.log(error)
     }
+
   }
 
   return (
