@@ -28,6 +28,7 @@ def main(context):
                             "wstoken":context.req.body_json["moken"],
                             "moodlewsrestformat":"json"})
         site_info = response.json()
+        print(site_info)
         response = requests.post(request_url,
                     data={"wsfunction":"core_enrol_get_users_courses",
                             "wstoken":context.req.body_json["moken"],
