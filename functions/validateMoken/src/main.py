@@ -9,7 +9,7 @@ from uuid import uuid5, NAMESPACE_URL
 from pymoodle import MoodleWebServiceAPIClient, MoodleError,MoodleException
 
 
-def genUUID(email):
+def genUUID(email:str):
     return str(uuid5(NAMESPACE_URL, email))
 
 # This Appwrite function will be executed every time your function is triggered
@@ -36,24 +36,23 @@ def main(context):
         emailAddress= user_data[0]["email"]
         rollnum = user_data[0]["idnumber"]
         name = user_data[0]["fullname"]
-        authusers = users.get(genUUID(emailAddress))
-            
-        # if authusers["total"] < 1:
-        #     userid = ID.unique(),
-        #     result = users.create(
-        #         user_id = userid,
-        #         email = emailAddress,
-        #         name = name
-        #     )
-        #     databases.create_document("attendease","users",userid,{"email":emailAddress,"rollnum":rollnum})
-        # authuser = users.list([Query.equal("email",emailAddress)])[0]
-        # datauser = databases.get_document("attendease","users",authuser.)
 
-        return context.res.json({"user":"hi"})
-    except AppwriteException as e:
-        return context.res.json(
-            {"error":f'{str(e)} {e.code} {e.type} {e.response}'},500
-        )
+        user_id = genUUID(emailAddress)
+        try:
+            user_authdata = users.get(user_id)
+            user_dbdata = databases.get_document("attendease","users",user_id)
+        except AppwriteException as e:
+            if e.type == "user_not_found":
+                user_authdata = users.create(
+                    user_id = user_id,
+                    email = emailAddress,
+                    name = name
+                )
+                user_dbdata = databases.create_document("attendease","users",user_id,{"email":emailAddress,"rollnum":rollnum})
+            else:
+                raise e
+
+        return context.res.json({"user_authdata":user_authdata,"user_dbdata":user_dbdata})
     except Exception as e:
         print(e)
         return context.res.json(
