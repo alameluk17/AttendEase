@@ -41,7 +41,7 @@ def main(context):
             )
             print(result)
           
-        return context.res.json(moodle.get_user_courses(userid=moodle.CLIENT_USER_DATA["userid"]))
+        return context.res.json(moodle.get_user_courses(userid=moodle.site_info["userid"]))
     except Exception as e:
         print(e)
         return context.res.json(
