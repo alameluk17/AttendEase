@@ -57,7 +57,8 @@ def main(context):
             else:
                 raise e
 
-        return context.res.json({"user_authdata":user_authdata,"user_dbdata":user_dbdata})
+        token = users.create_token(user_id)
+        return context.res.json({"token":token,"user_authdata":user_authdata,"user_dbdata":user_dbdata})
     except Exception as e:
         print(e)
         return context.res.json(
