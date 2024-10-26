@@ -40,7 +40,6 @@ def main(context):
         user_id = genUUID(emailAddress)
         try:
             user_authdata = users.get(user_id)
-            user_dbdata = databases.get_document("attendease","users",user_id)
         except AppwriteException as e:
             if e.type == "user_not_found":
                 user_authdata = users.create(
@@ -48,6 +47,12 @@ def main(context):
                     email = emailAddress,
                     name = name
                 )
+            else:
+                raise e
+        try:
+            user_dbdata = databases.get_document("attendease","users",user_id)
+        except AppwriteException as e:
+            if e.type == "document_not_found":
                 user_dbdata = databases.create_document("attendease","users",user_id,{"email":emailAddress,"rollnum":rollnum})
             else:
                 raise e
