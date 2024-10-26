@@ -22,8 +22,8 @@ def main(context):
             raise ValueError("`moken` must be provided in the JSON Request Body.")
 
         moodle = MoodleWebServiceAPIClient(token=context.req.body_json["moken"],api_base="https://lms.ssn.edu.in")
-     
-        courses = moodle.get_user_courses(userid=moodle.CLIENT_USER_DATA["userid"])
+        moodleUserId = moodle.site_info["userid"]
+        courses = moodle.get_user_courses(userid=moodleUserId)
         
         print(courses)
         return context.res.json(
