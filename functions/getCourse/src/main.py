@@ -24,7 +24,7 @@ def main(context):
         moodle = MoodleWebServiceAPIClient(token=context.req.body_json["moken"],api_base="https://lms.ssn.edu.in")
         moodleUserId = moodle.site_info["userid"]
         print(moodleUserId)
-        courses = moodle.get_user_courses(userid=moodleUserId)
+        courses = moodle.core_enrol_get_users_courses(userid=moodleUserId)
         
         print(courses)
         return context.res.json(
