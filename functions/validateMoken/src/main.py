@@ -25,7 +25,7 @@ def main(context):
             raise Exception("`moken` must be provided in the JSON Request Body.")
         moodle = MoodleWebServiceAPIClient(token=jsonobj["moken"],api_base="https://lms.ssn.edu.in")
         moodleUserId = moodle.site_info["userid"]
-        user_data = moodle.get_users_by_field("id",[moodleUserId])
+        user_data = moodle.core_user_get_users_by_field("id",[moodleUserId])
         emailAddress= user_data[0]["email"]
         rollNo = user_data[0]["idnumber"]
         name = user_data[0]["fullname"]
@@ -41,7 +41,7 @@ def main(context):
             )
             print(result)
           
-        return context.res.json(moodle.get_user_courses(userid=moodle.site_info["userid"]))
+        return context.res.json(moodle.core_enrol_get_users_courses(userid=moodle.site_info["userid"]))
     except Exception as e:
         print(e)
         return context.res.json(
