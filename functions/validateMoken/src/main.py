@@ -31,6 +31,7 @@ def main(context):
 
         moodle = MoodleWebServiceAPIClient(token=context.req.body_json["moken"],api_base="https://lms.ssn.edu.in")
         moodleUserId = moodle.site_info["userid"]
+        print(moodleUserId)
         user_data = moodle.core_user_get_users_by_field("id",[moodleUserId])
 
         emailAddress= user_data[0]["email"]
