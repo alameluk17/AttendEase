@@ -36,8 +36,8 @@ def main(context):
         emailAddress= user_data[0]["email"]
         rollnum = user_data[0]["idnumber"]
         name = user_data[0]["fullname"]
-
         authusers = users.get(genUUID(emailAddress))
+            
         # if authusers["total"] < 1:
         #     userid = ID.unique(),
         #     result = users.create(
@@ -50,6 +50,10 @@ def main(context):
         # datauser = databases.get_document("attendease","users",authuser.)
 
         return context.res.json({"user":"hi"})
+    except AppwriteException as e:
+        return context.res.json(
+            {"error":f'{str(e)} {e.code} {e.type} {e.response}'},500
+        )
     except Exception as e:
         print(e)
         return context.res.json(
