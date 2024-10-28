@@ -1,1 +1,4 @@
 appwrite
+python-dotenv
+requests
+git+https://github.com/Aathish04/pymoodle.git
