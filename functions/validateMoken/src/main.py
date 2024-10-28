@@ -27,8 +27,8 @@ def main(context):
         databases = Databases(client)
 
         if "moken" not in context.req.body_json:
-            raise ValueError("`moken` must be provided in the JSON Request Body.")
-
+            raise ValueError("`moken` must be provided in the JSON Request Body.")  
+                  
         moodle = MoodleWebServiceAPIClient(token=context.req.body_json["moken"],api_base="https://lms.ssn.edu.in")
         moodleUserId = moodle.site_info["userid"]
         print(moodleUserId)
