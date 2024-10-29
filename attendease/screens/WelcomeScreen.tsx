@@ -1,8 +1,49 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useFocusEffect } from '@react-navigation/native';
+import * as SecureStore from 'expo-secure-store';
+// import { authenticateUser } from '../components/authUtils';
 
 const Welcome = ({navigation}:{navigation:any}) => {
+
+    // Check if currentMoken is stored locally
+    // If yes, send request to validateMoken with currentMoken
+      // if the request sends the appwrite session token, validating the moken, redirect to CoursesPage
+      // if the request sends an error it is likely the moken has expired, user is required to login again with their new password
+    // If no, do nothing, user will login with their credentials
+    useFocusEffect(
+      React.useCallback(()=>{
+        const authenticateUser  = async() =>{
+          try {
+              const currentMoken = await SecureStore.getItemAsync('currentMoken')
+              if(currentMoken){
+                const body = { moken: currentMoken }
+                const response = await fetch('https://671b5d59cae31d6fd0ef.appwrite.global', {
+                  method: 'POST',
+                  body: JSON.stringify(body)
+                })
+                const result = await response.json()
+                if(response.status === 200){
+                  console.log(result)
+                  navigation.navigate('Courses')
+                } else if (response.status === 500){
+                  console.log('moken expired or invalid, reset password and log in again')
+                  await SecureStore.deleteItemAsync('currentMoken')
+                  navigation.navigate('Login')
+                }
+              }
+            }catch(error){
+              console.log(error)
+            }
+        }
+        authenticateUser()
+      }, [])
+    )
+
+    
+
+
     return (
       <View style={styles.container}>
         <View style={styles.imageContainer}>
@@ -18,7 +59,7 @@ const Welcome = ({navigation}:{navigation:any}) => {
         <Text style={styles.headerText}>Welcome to AttendEase,</Text>
         <Text style={styles.subHeaderText}>SSN's Own Attendance Tracker</Text>
         <Text style={styles.descriptionText}>
-        Your streamlined attendance solution starts. 
+        Your streamlined attendance solution starts here. 
         </Text>
         <Text  style={styles.descriptionText}>Keep up that 75%, y'all! :)</Text>
           <TouchableOpacity

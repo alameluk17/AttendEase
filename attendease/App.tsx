@@ -5,11 +5,13 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Welcome from './screens/WelcomeScreen'
-import Login from './screens/Login'; 
+import Login from './screens/Login';
+import Courses from './screens/CoursesScreen'; 
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -22,6 +24,11 @@ export default function App() {
           name = "Login"
           component = {Login}
           options = {{headerShown: false}}
+          />
+        <Stack.Screen 
+          name = "Courses"
+          component={Courses}
+          options={{headerShown: false}}
           />
       </Stack.Navigator>
     </NavigationContainer>

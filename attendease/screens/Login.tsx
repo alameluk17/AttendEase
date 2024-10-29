@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store'
 import { Client, Functions, ExecutionMethod } from "appwrite"
 
+
 async function getMoodleToken(moodleBaseURL: string, username: string, password: string): Promise<string> {
   try {
       // Check for missing parameters
@@ -64,72 +65,43 @@ const Login = ({navigation}: {navigation: any})=>{
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isPasswordShown, setIsPasswordShown] = useState(true);
 
+  const authenticateUser = async() => {
+      try {
+          const currentMoken = await SecureStore.getItemAsync('currentMoken')
+          if(currentMoken){
+            const body = { moken: currentMoken }
+            const response = await fetch('https://671b5d59cae31d6fd0ef.appwrite.global', {
+              method: 'POST',
+              body: JSON.stringify(body)
+            })
+            const result = await response.json()
+            if(response.status === 200){
+              console.log(result)
+              navigation.navigate('Courses')
+            } else if (response.status === 500){
+              console.log('moken expired or invalid, reset password and log in again')
+              await SecureStore.deleteItemAsync('currentMoken')
+              navigation.navigate('Login')
+            }
+          }
+        }catch(error){
+          console.log(error)
+       }
+  }
+
+  // First login and subsequent logins on password renewal
   const handleLogin = async () => {
     try {
-      let token = await getMoodleToken("https://lms.ssn.edu.in", email, password);
-      console.log("1")
-
-      await textAppWriteAPI()
-      console.log("2")
+      let moken = await getMoodleToken("https://lms.ssn.edu.in", email, password);
+      await SecureStore.setItemAsync('currentMoken', moken);
       setErrorMessage(null)
-      await SecureStore.setItemAsync('currentMoken', token);
-      // console.log("Token:", token);
+      authenticateUser()
     } catch (error: any) {
+      await SecureStore.deleteItemAsync('currentMoken');
       setErrorMessage(error.message)
       console.error("Login failed:", error.message);
     }
   };
-
-  const textAppWriteAPI = async () =>{ 
-    const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1') // Your API Endpoint
-    .setProject('attendease'); // Your project ID
-
-    const functions = new Functions(client);
-
-    const body = {moken : 'abcd'}
-
-    // try {
-    //   const result= await functions.createExecution(
-    //     'getAppwriteToken', // functionId
-    //     JSON.stringify(body), // body (optional)
-    //     true, // async (optional)
-    //     '/', // path (optional)
-    //     ExecutionMethod.POST, // method (optional)
-    //     {}, //headers (optional)
-    //   );
-    //   console.log("Result: ", result['$id']);
-    //   const res = await functions.getExecution(
-    //     'getAppWriteToken', // functionId
-    //     result['$id'] // executionId
-    //   );
-    //   console.log(res)
-    
-    // }catch(error){
-    //   console.log(error)
-    // }
-
-    // try{
-    //   const result = await fetch('https://671b42ca91a9506b72d5.appwrite.global/', {
-    //   method: 'POST',
-    //   body: JSON.stringify(body)
-    //   })
-    //   console.log(await result.json())
-    // }catch(error){
-    //   console.log(error)
-    // }
-
-     try{
-      const result = await fetch('https://671b5d59cae31d6fd0ef.appwrite.global', {
-      method: 'POST',
-      body: JSON.stringify(body)
-      })
-      console.log(await result.json())
-    }catch(error){
-      console.log(error)
-    }
-
-  }
 
   return (
     <View style={styles.container}>
